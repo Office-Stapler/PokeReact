@@ -1,0 +1,9 @@
+.image {
+    text-align: center;
+    display: block;
+}
+
+.buttons {
+    text-align: center;
+    display: flex;
+}
