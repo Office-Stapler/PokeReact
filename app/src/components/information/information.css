@@ -1,0 +1,10 @@
+.stats {
+    width: 500px;
+}
+.statName {
+    background-color: #FF5959
+}
+.statLabel {
+    background-color: black;
+    width: 255px;
+}

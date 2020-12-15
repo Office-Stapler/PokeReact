@@ -1,6 +1,5 @@
-.image {
-    text-align: center;
-    display: block;
+.info {
+    display: flex;
 }
 
 .buttons {

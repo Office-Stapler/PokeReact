@@ -1,20 +1,25 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import {
     TextField,
     Button
 } from '@material-ui/core';
 
+import Information from '../information/Information';
+
 export default class SearchComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'pokeName': ''
+            'pokeName': '',
+            'pokeInfo': null
         }
     }
 
     onTextFieldChange(e) {
         this.setState({
-            'pokeName': e.target.value
+            'pokeName': e.target.value,
+            'pokeInfo': this.state.pokeInfo
         })
     }
 
@@ -39,30 +44,25 @@ export default class SearchComponent extends React.Component {
                     
                     </Button>
                     <Button onClick={() => {
-                        const txtField = document.getElementById('txtPokeName');
                         const lblErr = document.getElementById('error');
-                        const body = document.getElementById('image');
                         const pokeAPI = 'https://pokeapi.co/api/v2/';
                         lblErr.innerHTML = '';
-                        let input = txtField.value;
-                        if (input === '') {
+                        if (this.state.pokeName === '') {
                             lblErr.innerHTML = "Please at least enter a name!";
                             return;
                         }
-                        fetch(pokeAPI + 'pokemon/' + input)
+                        fetch(pokeAPI + 'pokemon/' + this.state.pokeName.toLowerCase())
                         .then(response => {
                             return response.json();
                         }).then(pokeInfo => {
-                            body.innerHTML = '';
-                            let img = document.createElement('img');
-                            img.src = pokeInfo.sprites.other['official-artwork']['front_default'];
-                            img.id = `poke-${pokeInfo.id}`
                             this.setState({
-                                'pokeName': pokeInfo.name
+                                'pokeName': this.capitalize(pokeInfo.name),
+                                'pokeInfo': pokeInfo
                             })
-                            body.appendChild(img);
-                        }).catch((error) =>
-                        lblErr.innerHTML = "Please enter a valid pokemon name!");
+                        }).catch((error) => {
+                            console.log(error);
+                            lblErr.innerHTML = "Please enter a valid pokemon name!";
+                        });
                     }}
                     variant="contained">Search </Button>
                     <Button onClick={() => {
@@ -70,18 +70,16 @@ export default class SearchComponent extends React.Component {
                     }}
                     variant="contained">{'>'}</Button>
                 </div>
-                <div id="image" className="image"></div>
+                <Information pokeInfo={this.state.pokeInfo} />
             </React.Fragment>
         )
     }
 
     clickButton(isNext) {
         const lblErr = document.getElementById('error');
-        const body = document.getElementById('image');
         let id = 0;
-        if (body.innerHTML !== '') {
-            let child = body.childNodes[0];
-            id = parseInt(child.id.replace('poke-', ''));
+        if (this.state.pokeInfo !== null) {
+            id = this.state.pokeInfo.id;
         }
         if ((id === 1 && !isNext) || (id === 898 && isNext))
             return;
@@ -92,18 +90,18 @@ export default class SearchComponent extends React.Component {
         .then(response => {
             return response.json();
         }).then(pokeInfo => {
-            body.innerHTML = '';
-            let img = document.createElement('img');
-            img.src = pokeInfo.sprites.other['official-artwork']['front_default'];
-            img.id = `poke-${pokeInfo.id}`
             this.setState({
-                'pokeName': pokeInfo.name
+                'pokeName': this.capitalize(pokeInfo.name),
+                'pokeInfo': pokeInfo
             })
-            body.appendChild(img);
         }).catch((error) => {
             console.log(error);
             lblErr.innerHTML = "Please enter a valid pokemon name!";
         })
+    }
+
+    capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 }
 
