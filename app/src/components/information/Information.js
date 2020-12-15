@@ -62,7 +62,7 @@ export default class Information extends React.Component {
                     style={{
                         float: "left"
                     }}
-                    >{stat.stat.name}</div>
+                    >{this.capitalize(stat.stat.name)}</div>
                     <div style={{
                         float: "right"
                     }}>{stat['base_stat']}</div>
