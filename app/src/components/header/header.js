@@ -1,5 +1,4 @@
 import React from 'react';
-import pokedex from '../../data/pokedex.png';
 import './header.css';
 
 export default class Header extends React.Component {
@@ -8,6 +7,7 @@ export default class Header extends React.Component {
     }
 
     render() {
+        let pokedex = process.env.PUBLIC_URL + '/images/pokedex.png';
         return (
             <div className="header">
                 <h1>Pokedex</h1>

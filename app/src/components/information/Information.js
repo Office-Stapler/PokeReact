@@ -1,7 +1,9 @@
 import React from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 import './information.css';
+
+
+
 
 export default class Information extends React.Component {
     constructor(props) {
@@ -15,10 +17,13 @@ export default class Information extends React.Component {
             "special-defense": "blue",
             "speed": "yellow"
         }
+        this.typeColours = {
+            'poison': 'pink',
+            'ghost': 'purple'
+        }
     }
 
     render() {
-        
         this.info = this.props.pokeInfo;
         if (this.props.pokeInfo != null) {
             return (
@@ -29,14 +34,26 @@ export default class Information extends React.Component {
                             <img src={this.info.sprites.other['official-artwork']['front_default']}></img>
                         </div>
                     </div>
-                    <table className="stats">
-                        <tbody>
-                            <tr>
-                                <th>Base Stats</th>
-                            </tr>
-                            {this.getStats()}
-                        </tbody>
-                    </table>
+                    <div className="StatAndTypes">
+                        <table className="stats">
+                            <tbody>
+                                <tr>
+                                    <th>Base Stats</th>
+                                </tr>
+                                {this.getStats()}
+                            </tbody>
+                        </table>
+                        <div className="types">
+                            {this.getTypes()}
+                        </div>
+                        <table className="typeEffectiveness">
+                            <tbody>
+                                <tr>
+                                    <th>Type effectiveness</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )
         }
@@ -49,6 +66,20 @@ export default class Information extends React.Component {
 
     capitalize(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    getTypes() {
+        this.types = this.info.types;
+        let parts = []
+
+        for (let type of this.types) {
+            let image = process.env.PUBLIC_URL + `/types_images/${type.type.name}.png`;
+            console.log(image);
+            parts.push(
+                <img src={image}></img>
+            );
+        }
+        return parts;
     }
 
     getStats() {
