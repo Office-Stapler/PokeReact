@@ -118,6 +118,8 @@ export default class Information extends React.Component {
                         <tr key={relation}>
                             <td style={{
                                 backgroundColor: this.typeColours[relation],
+                                color: "white",
+                                textAlign: "center",
                                 borderRadius: 6
                             }}>
                                 {this.capitalize(relation)}
@@ -132,7 +134,9 @@ export default class Information extends React.Component {
                         <tr key={relation}>
                             <td  style={{
                                 backgroundColor: this.typeColours[relation],
-                                borderRadius: 6
+                                color: "white",
+                                textAlign: "center",
+                                borderRadius: 3
                             }}>
                                 {this.capitalize(relation)}
                             </td>
@@ -146,7 +150,9 @@ export default class Information extends React.Component {
                         <tr key={relation}>
                             <td  style={{
                                 backgroundColor: this.typeColours[relation],
-                                borderRadius: 6
+                                color: "white",
+                                textAlign: "center",
+                                borderRadius: 3
                             }}>
                                 {this.capitalize(relation)}
                             </td>
@@ -160,7 +166,9 @@ export default class Information extends React.Component {
                         <tr key={relation}>
                             <td  style={{
                                 backgroundColor: this.typeColours[relation],
-                                borderRadius: 6
+                                color: "white",
+                                textAlign: "center",
+                                borderRadius: 3
                             }}>
                                 {this.capitalize(relation)}
                             </td>
