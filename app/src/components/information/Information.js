@@ -209,6 +209,7 @@ export default class Information extends React.Component {
                             <td  style={{
                                 backgroundColor: 'black',
                                 borderRadius: 6,
+                                textAlign: "center",
                                 color: "white"
                             }}>
                                 None
