@@ -55,13 +55,13 @@ export default class Information extends React.Component {
     }
     render() {
         this.info = this.props.pokeInfo;
-        if (this.info != null) {
+        if (this.info !== null) {
             return (
                 <div className="info">
                     <div className="NameImageType">
                         <h2>{this.getPokeName()}, id {this.info.id}</h2>
                         <div className="image">
-                            <img src={this.info.sprites.other['official-artwork']['front_default']}></img>
+                            <img alt="Error loading pokemon" src={this.info.sprites.other['official-artwork']['front_default']}></img>
                         </div>
                         {this.getTypes()}
                     </div>
@@ -96,7 +96,7 @@ export default class Information extends React.Component {
         for (let type of this.types) {
             let image = process.env.PUBLIC_URL + `/types_images/${type.type.name}.png`;
             parts.push(
-                <img key={type.type.name} src={image}></img>
+                <img alt="Error loading pokemon type" key={type.type.name} src={image}></img>
             );
         }
         return parts;
@@ -113,7 +113,7 @@ export default class Information extends React.Component {
             let damage_relations = this.props['damage_relations'];
             if (damage_relations.hasOwnProperty(relation)) {
                 let num = damage_relations[relation];
-                if (num < 1 && num != 0) {
+                if (num < 1 && num !== 0) {
                     strongAgainst.push(
                         <tr key={relation}>
                             <td style={{
@@ -141,7 +141,7 @@ export default class Information extends React.Component {
                             </td>
                         </tr>   
                     )
-                } else if (num == 1) {
+                } else if (num === 1) {
                     neutralAgainst.push(
                         <tr key={relation}>
                             <td  style={{
@@ -196,7 +196,7 @@ export default class Information extends React.Component {
                     <tr>
                         <th>Immune to</th>
                     </tr>
-                    {immuneAgainst.length != 0 ? immuneAgainst : (                   
+                    {immuneAgainst.length !== 0 ? immuneAgainst : (                   
                         <tr key="None">
                             <td  style={{
                                 backgroundColor: 'black',
