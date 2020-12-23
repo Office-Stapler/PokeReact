@@ -59,20 +59,20 @@ export default class Information extends React.Component {
             return (
                 <div className="info">
                     <div className="NameImageType">
-                        <h2>{this.getPokeName()}, id {this.info.id}</h2>
+                        <p className="displayP">{this.getPokeName()}, id {this.info.id}</p>
                         <div className="image">
                             <img alt="Error loading pokemon" src={this.info.sprites.other['official-artwork']['front_default']}></img>
                         </div>
                         {this.getTypes()}
                     </div>
                     <div className="statWrapper">
-                        <p className="baseStatP">Base Stats</p>
+                        <p className="displayP">Base Stats</p>
                         <table className="table">
-                            <tbody className="StatAndTypes">
+                            <tbody>
                                 {this.getStats()}
                             </tbody>
                         </table>
-                        <p className="baseStatP">Type Effectiveness</p>
+                        <p className="displayP">Type Effectiveness</p>
                         {this.getEffectiveness()}
                     </div>
                 </div>
@@ -113,70 +113,29 @@ export default class Information extends React.Component {
             let damage_relations = this.props['damage_relations'];
             if (damage_relations.hasOwnProperty(relation)) {
                 let num = damage_relations[relation];
-                if (num < 1 && num !== 0) {
-                    strongAgainst.push(
-                        <tr key={relation}>
-                            <td style={{
-                                backgroundColor: this.typeColours[relation],
-                                color: "white",
-                                textAlign: "center",
-                                borderRadius: 6
-                            }}>
-                                {this.capitalize(relation)}
-                            </td>
-                            <td>
-                                x{num}
-                            </td>
-                        </tr>
-                    )
+                let info = (                        
+                    <tr key={relation}>
+                        <td style={{
+                            backgroundColor: this.typeColours[relation],
+                            color: "black",
+                            textAlign: "center",
+                            borderRadius: "10px"
+                        }}>
+                            {this.capitalize(relation)}
+                        </td>
+                        <td>
+                            x{num}
+                        </td>
+                    </tr>
+                )
+                if (num === 0) {
+                    immuneAgainst.push(info);
+                } else if (num < 1) {
+                    strongAgainst.push(info);
                 } else if (num > 1) {
-                    weakAgainst.push(
-                        <tr key={relation}>
-                            <td  style={{
-                                backgroundColor: this.typeColours[relation],
-                                color: "white",
-                                textAlign: "center",
-                                borderRadius: 3
-                            }}>
-                                {this.capitalize(relation)}
-                            </td>
-                            <td>
-                                x{num}
-                            </td>
-                        </tr>   
-                    )
-                } else if (num === 1) {
-                    neutralAgainst.push(
-                        <tr key={relation}>
-                            <td  style={{
-                                backgroundColor: this.typeColours[relation],
-                                color: "white",
-                                textAlign: "center",
-                                borderRadius: 3
-                            }}>
-                                {this.capitalize(relation)}
-                            </td>
-                            <td>
-                                x{num}
-                            </td>
-                        </tr>  
-                    )
+                    weakAgainst.push(info);
                 } else {
-                    immuneAgainst.push(
-                        <tr key={relation}>
-                            <td  style={{
-                                backgroundColor: this.typeColours[relation],
-                                color: "white",
-                                textAlign: "center",
-                                borderRadius: 3
-                            }}>
-                                {this.capitalize(relation)}
-                            </td>
-                            <td>
-                                x{num}
-                            </td>
-                        </tr>   
-                    )
+                    neutralAgainst.push(info);
                 }
             }
         }
@@ -228,7 +187,11 @@ export default class Information extends React.Component {
         let rows = []
         for (let stat of this.stats) {
             rows.push(
-            <tr key={stat.stat.name} style={{backgroundColor: this.colours[stat.stat.name]}}>
+            <tr key={stat.stat.name} style={{ 
+                backgroundColor: this.colours[stat.stat.name],
+                height: "10px"
+                
+            }}>
                 <td style={{
                     float: "left",
                     width: 255
@@ -237,17 +200,17 @@ export default class Information extends React.Component {
                 </td>
                 <td style={{
                         float: "right"
-                }}>{stat['base_stat']}
+                }}>
+                    {stat['base_stat']}
                 </td>
                 <td className="statLabel">
-                    <p
-                    style= {{
-                    width: stat['base_stat'] / 255 * 100,
-                    backgroundColor: this.backgroundColors[stat.stat.name],
-                    border: "1px solid black",
-                    height: "20px",
+                    <div style= {{
+                        width: stat['base_stat'] / 255 * 100,
+                        backgroundColor: this.backgroundColors[stat.stat.name],
+                        border: "1px solid black",
+                        height: "20px",
                     }}>
-                    </p>
+                    </div>
                 </td>
             </tr>);
         }
