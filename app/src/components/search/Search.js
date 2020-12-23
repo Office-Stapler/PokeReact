@@ -10,17 +10,48 @@ import Information from '../information/Information';
 export default class SearchComponent extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             'pokeName': '',
-            'pokeInfo': null
+            'pokeInfo': null,
+            'damage_relations': this.resetDamageRelations()
         }
+    }
+
+    resetDamageRelations() {
+        let damage_relations = {};
+        let baseTypes = [
+            'normal',
+            'fire',
+            'water',
+            'electric',
+            'grass',
+            'ice',
+            'fighting',
+            'poison',
+            'ground',
+            'flying',
+            'psychic',
+            'bug',
+            'rock',
+            'ghost',
+            'dragon',
+            'dark',
+            'steel',
+            'fairy'
+        ]
+        for (let type of baseTypes) {
+            damage_relations[type] = 1.0;
+        }
+        return damage_relations;
     }
 
     onTextFieldChange(e) {
         this.setState({
             'pokeName': e.target.value,
-            'pokeInfo': this.state.pokeInfo
-        })
+            'pokeInfo': this.state.pokeInfo,
+            'damage_relations': this.state['damage_relations']
+        });
     }
 
     render() {
@@ -57,8 +88,10 @@ export default class SearchComponent extends React.Component {
                         }).then(pokeInfo => {
                             this.setState({
                                 'pokeName': this.capitalize(pokeInfo.name),
-                                'pokeInfo': pokeInfo
+                                'pokeInfo': pokeInfo,
+                                'damage_relations': this.resetDamageRelations()
                             })
+                            this.setEffectiveness();
                         }).catch((error) => {
                             console.log(error);
                             lblErr.innerHTML = "Please enter a valid pokemon name!";
@@ -70,9 +103,41 @@ export default class SearchComponent extends React.Component {
                     }}
                     variant="contained">{'>'}</Button>
                 </div>
-                <Information pokeInfo={this.state.pokeInfo} />
+                <Information pokeInfo={this.state.pokeInfo} damage_relations={this.state.damage_relations} />
             </React.Fragment>
         )
+    }
+
+    setEffectiveness() {
+        this.types = this.state.pokeInfo['types'];
+        for (let type of this.types) {
+            let damage_relations = this.state['damage_relations'];
+            fetch(type.type.url)
+            .then(response => response.json())
+            .then((json) => {
+                let relation = json['damage_relations'];
+                let doubleEffective = relation['double_damage_from'];
+                let halfEffective = relation['half_damage_from'];
+                let immuneTo = relation['no_damage_from'];
+                damage_relations = this.fit_relations(damage_relations, doubleEffective, 2);
+                damage_relations = this.fit_relations(damage_relations, halfEffective, 0.5);
+                damage_relations = this.fit_relations(damage_relations, immuneTo, 0);
+                this.setState({
+                    'pokeName': this.state.pokeName,
+                    'pokeInfo': this.state.pokeInfo,
+                    'damage_relations': damage_relations
+                });
+            });
+        }
+    }
+
+    fit_relations(damage_relations, typeList, multiple) {
+        for (let type of typeList) {
+            let name = type['name'];
+            let num = damage_relations[name];
+            damage_relations[name] = num * multiple;
+        }
+        return damage_relations;
     }
 
     clickButton(isNext) {
@@ -92,8 +157,11 @@ export default class SearchComponent extends React.Component {
         }).then(pokeInfo => {
             this.setState({
                 'pokeName': this.capitalize(pokeInfo.name),
-                'pokeInfo': pokeInfo
+                'pokeInfo': pokeInfo,
+                'damage_relations': this.resetDamageRelations()
             })
+            this.setEffectiveness()
+            
         }).catch((error) => {
             console.log(error);
             lblErr.innerHTML = "Please enter a valid pokemon name!";
