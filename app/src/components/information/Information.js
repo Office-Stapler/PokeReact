@@ -71,17 +71,9 @@ export default class Information extends React.Component {
                             <tbody className="StatAndTypes">
                                 {this.getStats()}
                             </tbody>
-                            <tbody className="typeEffectiveness">
-                                <tr>
-                                    <th>Type effectiveness</th>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr className="typeEffectiveness">
-                                    {this.getEffectiveness()}
-                                </tr>
-                            </tbody>
                         </table>
+                        <p className="baseStatP">Type Effectiveness</p>
+                        {this.getEffectiveness()}
                     </div>
                 </div>
                 
@@ -113,40 +105,110 @@ export default class Information extends React.Component {
 
 
     getEffectiveness() {
-        let table = [];
         let weakAgainst = [];
         let strongAgainst = [];
         let neutralAgainst = [];
         let immuneAgainst = [];
-        console.log(this.props['damage_relations'])
         for (let relation in this.props['damage_relations']) {
             let damage_relations = this.props['damage_relations'];
             if (damage_relations.hasOwnProperty(relation)) {
                 let num = damage_relations[relation];
-                if (num < 1) {
+                if (num < 1 && num != 0) {
                     strongAgainst.push(
-                        <td key={relation}>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th>Weak to</th>
-                                        <td>
-                                            x{num}-{this.capitalize(relation)}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
+                        <tr key={relation}>
+                            <td style={{
+                                backgroundColor: this.typeColours[relation],
+                                borderRadius: 6
+                            }}>
+                                {this.capitalize(relation)}
+                            </td>
+                            <td>
+                                x{num}
+                            </td>
+                        </tr>
+                    )
+                } else if (num > 1) {
+                    weakAgainst.push(
+                        <tr key={relation}>
+                            <td  style={{
+                                backgroundColor: this.typeColours[relation],
+                                borderRadius: 6
+                            }}>
+                                {this.capitalize(relation)}
+                            </td>
+                            <td>
+                                x{num}
+                            </td>
+                        </tr>   
+                    )
+                } else if (num == 1) {
+                    neutralAgainst.push(
+                        <tr key={relation}>
+                            <td  style={{
+                                backgroundColor: this.typeColours[relation],
+                                borderRadius: 6
+                            }}>
+                                {this.capitalize(relation)}
+                            </td>
+                            <td>
+                                x{num}
+                            </td>
+                        </tr>  
+                    )
+                } else {
+                    immuneAgainst.push(
+                        <tr key={relation}>
+                            <td  style={{
+                                backgroundColor: this.typeColours[relation],
+                                borderRadius: 6
+                            }}>
+                                {this.capitalize(relation)}
+                            </td>
+                            <td>
+                                x{num}
+                            </td>
+                        </tr>   
                     )
                 }
             }
         }
         return (
-            <div>
-                <table>
-                    {strongAgainst}      
-                </table>
-            </div>
+            <table className="table1">
+                <tbody className="relationData">
+                    <tr>
+                        <th>Strong against</th>
+                    </tr>
+                    {strongAgainst}
+                </tbody>    
+                <tbody className="relationData">
+                    <tr>
+                        <th>Weak to</th>
+                    </tr>
+                    {weakAgainst}
+                </tbody>
+                <tbody className="relationData">
+                    <tr>
+                        <th>Neutral to</th>
+                    </tr>
+                    {neutralAgainst}
+                </tbody>
+                <tbody className="relationData">
+                    <tr>
+                        <th>Immune to</th>
+                    </tr>
+                    {immuneAgainst.length != 0 ? immuneAgainst : (                   
+                        <tr key="None">
+                            <td  style={{
+                                backgroundColor: 'black',
+                                borderRadius: 6,
+                                color: "white"
+                            }}>
+                                None
+                            </td>
+                        </tr>  
+                    )}
+                </tbody>
+            </table>
         );
     }
 
@@ -169,14 +231,14 @@ export default class Information extends React.Component {
                 }}>{stat['base_stat']}
                 </td>
                 <td className="statLabel">
-                    <div
+                    <p
                     style= {{
                     width: stat['base_stat'] / 255 * 100,
                     backgroundColor: this.backgroundColors[stat.stat.name],
                     border: "1px solid black",
-                    height: "20px"
+                    height: "20px",
                     }}>
-                    </div>
+                    </p>
                 </td>
             </tr>);
         }
