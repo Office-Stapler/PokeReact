@@ -7,6 +7,12 @@
 .statLabel {
     width: 255px;
 }
+
+.image {
+    text-align: center;
+    display: block;
+}
+
 .StatAndTypes {
     color: black;
 }
@@ -15,6 +21,7 @@
     border-radius: 10px;
     border: 3px solid #1c2c30;
     background: #a5bec4;
+    display: block;
 }
 
 .table1 {
@@ -24,11 +31,43 @@
     display: flex;
 }
 
+.table2 {
+    border-radius: 10px;
+    border: 3px solid #1c2c30;
+    background:white;
+    display: inline-block;
+}
+
 .displayP {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
+    font-size: large;
     text-align: center;
 }
+
+.info {
+    display: block;
+    text-align: center;
+}
+
 .relationData {
     display: block;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: darkblue;
+}
+
+.statWrapper {
+    display: inline-flex;
+}
+
+.pokedexDiv {
+    background-color: black;
+    color: white;
+    border-radius: 10%;
+}
+
+.entryDiv {
+    text-align: center;
 }
