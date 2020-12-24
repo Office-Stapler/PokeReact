@@ -224,13 +224,15 @@ export default class Information extends React.Component {
 
     getPokedexEntries() {
         let entries = [];
+        let versions = [];
         for (let entry of this.props.pokedex_entries) {
-            if (entry.language.name === "en") {
+            let version = entry.version.name;
+            if (entry.language.name === "en" && !versions.includes(version)) {
                 entries.push(
-                    <tr>
+                    <tr key={version}>
                         <th>
                             <div className="pokedexDiv">
-                                {this.capitalize(entry.version.name)}
+                                {this.capitalize(version)}
                             </div>
                         </th>
                         <td style = {{
@@ -242,6 +244,7 @@ export default class Information extends React.Component {
                         </td>
                     </tr>
                 )
+                versions.push(version);
             }
         }
 
