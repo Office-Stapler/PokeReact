@@ -9,7 +9,6 @@ export default class Information extends React.Component {
     constructor(props) {
         super(props);
         this.pokeAPI = 'https://pokeapi.co/api/v2/';
-        let damage_relations = {};
         this.colours = {
             "hp": "lightgreen",
             'attack': "#ff9c9c",
@@ -18,10 +17,6 @@ export default class Information extends React.Component {
             "special-defense": "#9c9eff",
             "speed": "#f279c4"
         }
-        
-        this.state = {
-            'damage_relations': damage_relations
-        };
 
         this.backgroundColors = {
             "hp": "green",
@@ -53,27 +48,37 @@ export default class Information extends React.Component {
             'fairy': '#EE99AC'
         }
     }
+    
     render() {
         this.info = this.props.pokeInfo;
         if (this.info !== null) {
             return (
                 <div className="info">
                     <div className="NameImageType">
-                        <p className="displayP">{this.getPokeName()}, id {this.info.id}</p>
+                        <p className="displayP">{this.getPokeName()} (id {this.info.id})</p>
                         <div className="image">
                             <img alt="Error loading pokemon" src={this.info.sprites.other['official-artwork']['front_default']}></img>
+                            {this.getTypes()}
                         </div>
-                        {this.getTypes()}
+                        
                     </div>
                     <div className="statWrapper">
-                        <p className="displayP">Base Stats</p>
-                        <table className="table">
-                            <tbody>
-                                {this.getStats()}
-                            </tbody>
-                        </table>
-                        <p className="displayP">Type Effectiveness</p>
-                        {this.getEffectiveness()}
+                        <div>
+                            <p className="displayP">Base Stats</p>
+                            <table className="table">
+                                <tbody>
+                                    {this.getStats()}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <p className="displayP">Type Effectiveness</p>
+                            {this.getEffectiveness()}
+                        </div>
+                    </div>
+                    <div className="pokedexEntry">
+                        <p className="displayP">Pokedex Entries</p>
+                        {this.getPokedexEntries()}
                     </div>
                 </div>
                 
@@ -99,10 +104,12 @@ export default class Information extends React.Component {
                 <img alt="Error loading pokemon type" key={type.type.name} src={image}></img>
             );
         }
-        return parts;
+        return (
+            <div>
+                {parts}
+            </div>
+        );
     }
-
-
 
     getEffectiveness() {
         let weakAgainst = [];
@@ -119,7 +126,7 @@ export default class Information extends React.Component {
                             backgroundColor: this.typeColours[relation],
                             color: "black",
                             textAlign: "center",
-                            borderRadius: "10px"
+                            borderRadius: "10px",
                         }}>
                             {this.capitalize(relation)}
                         </td>
@@ -180,8 +187,6 @@ export default class Information extends React.Component {
         );
     }
 
-
-
     getStats() {
         this.stats = this.info.stats;
         let rows = []
@@ -189,8 +194,8 @@ export default class Information extends React.Component {
             rows.push(
             <tr key={stat.stat.name} style={{ 
                 backgroundColor: this.colours[stat.stat.name],
-                height: "10px"
-                
+                height: "10px",
+                textAlign: "left"
             }}>
                 <td style={{
                     float: "left",
@@ -215,5 +220,37 @@ export default class Information extends React.Component {
             </tr>);
         }
         return rows;
+    }
+
+    getPokedexEntries() {
+        let entries = [];
+        for (let entry of this.props.pokedex_entries) {
+            if (entry.language.name === "en") {
+                entries.push(
+                    <tr>
+                        <th>
+                            <div className="pokedexDiv">
+                                {this.capitalize(entry.version.name)}
+                            </div>
+                        </th>
+                        <td style = {{
+                            textAlign: "center"
+                        }}>
+                            <div className="entryDiv">
+                                {entry.flavor_text}
+                            </div>
+                        </td>
+                    </tr>
+                )
+            }
+        }
+
+        return (
+            <table className="table2">
+                <tbody>
+                    {entries}
+                </tbody>
+            </table>
+        )
     }
 }
