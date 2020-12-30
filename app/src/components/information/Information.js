@@ -199,7 +199,9 @@ export default class Information extends React.Component {
                             <div style={{
                                 backgroundColor: version in gameVersionColours ? gameVersionColours[version].back : "black",
                                 color: version in gameVersionColours ? gameVersionColours[version].fore : "white",
-                                borderRadius: "10%"
+                                borderRadius: "1em",
+                                height: "2em",
+                                lineHeight: "2em"
                             }}>
                                 {capitalize(version)}
                             </div>

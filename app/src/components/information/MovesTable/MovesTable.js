@@ -6,6 +6,7 @@ export const MovesTable = ({moves}) => {
             <tr>
                 <th>Move</th>
                 <th>Power</th>
+                <th>Type</th>
             </tr>
             </thead>
             <tbody>

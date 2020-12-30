@@ -55,6 +55,100 @@ export const gameVersionColours = {
         "fore": "black"
     },
     "silver": {
-        "back": "#C0C0C0"
+        "back": "#C0C0C0",
+        "fore": "black"
+    },
+    "crystal": {
+        "back": "#4FD9FF",
+        "fore": "black"
+    },
+    "ruby": {
+        "back": "#A00000",
+        "fore": "white"
+    },
+    "sapphire": {
+        "back": "#0000A0",
+        "fore": "white"
+    },
+    "emerald": {
+        "back": "#00A000",
+        "fore": "white"
+    },
+    "firered": {
+        "back": "#FF7327",
+        "fore": "#000"
+    },
+    "leafgreen": {
+        "back": "#00DD00",
+        "fore": "black"
+    },
+    "diamond": {
+        "back": "#AAAAFF",
+        "fore": "#000"
+    },
+    "pearl": {
+        "back": "#FFAAAA",
+        "fore": "#000"
+    },
+    "platinum": {
+        "back": "#999999",
+        "fore": "#000"
+    },
+    "heartgold": {
+        "back": "#B69E00",
+        "fore": "black"
+    },
+    "soulsilver": {
+        "back": "#C0C0E1",
+        "fore": "#000"
+    },
+    "black": {
+        "back": "#444444",
+        "fore": "white"
+    },
+    "white": {
+        "back": "#E1E1E1",
+        "fore": "black"
+    },
+    "black-2": {
+        "back": "#444444",
+        "fore": "white"
+    },
+    "white-2": {
+        "back": "#E1E1E1",
+        "fore": "black"
+    },
+    "x": {
+        "back": "#025DA6",
+        "fore": "white"
+    },
+    "y": {
+        "back": "#EA1A3E",
+        "fore": "black"
+    },
+    "omega-ruby": {
+        "back": "#AB2813",
+        "fore": "white"
+    },
+    "alpha-sapphire": {
+        "back": "#26649C",
+        "fore": "white"
+    },
+    "lets-go-pikachu": {
+        "back": "#F5DA26",
+        "fore": "black"
+    },
+    "lets-go-eevee": {
+        "back": "#D4924B",
+        "fore": "black"
+    },
+    "sword": {
+        "back": "#00A1E9",
+        "fore": "black"
+    },
+    "shield": {
+        "back": "#BF004F",
+        "fore": "black"
     }
+
 }
