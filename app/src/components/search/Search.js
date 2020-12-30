@@ -4,6 +4,8 @@ import {
     Button
 } from '@material-ui/core';
 
+
+import {capitalize} from '../utils/stringUtils';
 import Information from '../information/Information';
 
 export default class SearchComponent extends React.Component {
@@ -16,6 +18,17 @@ export default class SearchComponent extends React.Component {
             'damage_relations': this.resetDamageRelations(),
             'pokedex_entries': []
         }
+        this.handleArrowsKeyUp = (event) => {
+            if (event.key === "ArrowRight") {
+                this.clickButton(true);
+            } else if (event.key === "ArrowLeft") {
+                this.clickButton(false);
+            }
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keyup", this.handleArrowsKeyUp, false);
     }
 
     resetDamageRelations() {
@@ -65,50 +78,41 @@ export default class SearchComponent extends React.Component {
                     value={this.state.pokeName}
                     color="secondary"
                     onChange={this.onTextFieldChange.bind(this)}
+                    onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                            this.clickSearch();
+                        }
+                    }}
                 />
                 <p id="error"></p>
                 <div className="buttons">
-                    <Button 
-                    onClick={() => {
-                        this.clickButton(false);
-                    }}
-                    variant="contained">{'<'}
-                    
+                    <Button
+                        onClick={() => {
+                            this.clickButton(false);
+                        }}
+                        variant="contained"
+                        id="button-left-click"
+                    >
+                        {'<'}
                     </Button>
-                    <Button onClick={() => {
-                        const lblErr = document.getElementById('error');
-                        const pokeAPI = 'https://pokeapi.co/api/v2/';
-                        lblErr.innerHTML = '';
-                        if (this.state.pokeName === '') {
-                            lblErr.innerHTML = "Please at least enter a name!";
-                            return;
-                        }
-                        fetch(pokeAPI + 'pokemon/' + this.state.pokeName.toLowerCase())
-                        .then(response => {
-                            return response.json();
-                        }).then(pokeInfo => {
-                            this.setState({
-                                'pokeName': this.capitalize(pokeInfo.name),
-                                'pokeInfo': pokeInfo,
-                                'damage_relations': this.resetDamageRelations(),
-                                'pokedex_entries': []
-                            })
-                            this.setEffectiveness();
-                            this.findPokedexEntries();
-                        }).catch((error) => {
-                            console.log(error);
-                            lblErr.innerHTML = "Please enter a valid pokemon name!";
-                        });
-                    }}
-                    variant="contained">Search </Button>
-                    <Button onClick={() => {
-                        this.clickButton(true);
-                    }}
-                    variant="contained">{'>'}</Button>
+                    <Button
+                        onClick={() => this.clickSearch()}
+                        variant="contained"
+                    >
+                        Search
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            this.clickButton(true);
+                        }}
+                        variant="contained"
+                    >
+                        {'>'}
+                    </Button>
                 </div>
-                <Information 
-                    pokeInfo={this.state.pokeInfo} 
-                    damage_relations={this.state.damage_relations} 
+                <Information
+                    pokeInfo={this.state.pokeInfo}
+                    damage_relations={this.state.damage_relations}
                     pokedex_entries={this.state.pokedex_entries}
                 />
             </React.Fragment>
@@ -120,39 +124,39 @@ export default class SearchComponent extends React.Component {
         for (let type of this.types) {
             let damage_relations = this.state['damage_relations'];
             fetch(type.type.url)
-            .then(response => response.json())
-            .then((json) => {
-                let relation = json['damage_relations'];
-                let doubleEffective = relation['double_damage_from'];
-                let halfEffective = relation['half_damage_from'];
-                let immuneTo = relation['no_damage_from'];
-                damage_relations = this.fit_relations(damage_relations, doubleEffective, 2);
-                damage_relations = this.fit_relations(damage_relations, halfEffective, 0.5);
-                damage_relations = this.fit_relations(damage_relations, immuneTo, 0);
-                this.setState({
-                    'pokeName': this.state.pokeName,
-                    'pokeInfo': this.state.pokeInfo,
-                    'damage_relations': damage_relations,
-                    'pokedex_entries': []
+                .then(response => response.json())
+                .then((json) => {
+                    let relation = json['damage_relations'];
+                    let doubleEffective = relation['double_damage_from'];
+                    let halfEffective = relation['half_damage_from'];
+                    let immuneTo = relation['no_damage_from'];
+                    damage_relations = this.fit_relations(damage_relations, doubleEffective, 2);
+                    damage_relations = this.fit_relations(damage_relations, halfEffective, 0.5);
+                    damage_relations = this.fit_relations(damage_relations, immuneTo, 0);
+                    this.setState({
+                        'pokeName': this.state.pokeName,
+                        'pokeInfo': this.state.pokeInfo,
+                        'damage_relations': damage_relations,
+                        'pokedex_entries': []
+                    });
                 });
-            });
         }
     }
 
     findPokedexEntries() {
         let speciesURL = this.state.pokeInfo.species.url;
         fetch(speciesURL)
-        .then(response => {
-            return response.json()
-        })
-        .then(json => {
-            this.setState({
-                'pokeName': this.state.pokeName,
-                'pokeInfo': this.state.pokeInfo,
-                'damage_relations': this.state.damage_relations,
-                'pokedex_entries': json['flavor_text_entries']
+            .then(response => {
+                return response.json()
             })
-        })
+            .then(json => {
+                this.setState({
+                    'pokeName': this.state.pokeName,
+                    'pokeInfo': this.state.pokeInfo,
+                    'damage_relations': this.state.damage_relations,
+                    'pokedex_entries': json['flavor_text_entries']
+                })
+            })
     }
 
     fit_relations(damage_relations, typeList, multiple) {
@@ -176,25 +180,48 @@ export default class SearchComponent extends React.Component {
         lblErr.innerHTML = '';
         let currId = id + (isNext ? 1 : -1);
         fetch(`${pokeAPI}pokemon/${currId}`)
-        .then(response => {
-            return response.json();
-        }).then(pokeInfo => {
+            .then(response => {
+                return response.json();
+            }).then(pokeInfo => {
+                this.setState({
+                    'pokeName': capitalize(pokeInfo.name),
+                    'pokeInfo': pokeInfo,
+                    'damage_relations': this.resetDamageRelations(),
+                    'pokedex_entries': []
+                })
+                this.setEffectiveness()
+                this.findPokedexEntries();
+            }).catch((error) => {
+                console.log(error);
+                lblErr.innerHTML = "Please enter a valid pokemon name!";
+            })
+    }
+
+    clickSearch() {
+        const lblErr = document.getElementById('error');
+        const pokeAPI = 'https://pokeapi.co/api/v2/';
+        lblErr.innerHTML = '';
+        if (this.state.pokeName === '') {
+            lblErr.innerHTML = "Please at least enter a name!";
+            return;
+        }
+        fetch(pokeAPI + 'pokemon/' + this.state.pokeName.toLowerCase())
+            .then(response => {
+                return response.json();
+            }).then(pokeInfo => {
             this.setState({
-                'pokeName': this.capitalize(pokeInfo.name),
+                'pokeName': capitalize(pokeInfo.name),
                 'pokeInfo': pokeInfo,
                 'damage_relations': this.resetDamageRelations(),
                 'pokedex_entries': []
             })
-            this.setEffectiveness()
+            this.setEffectiveness();
             this.findPokedexEntries();
         }).catch((error) => {
             console.log(error);
             lblErr.innerHTML = "Please enter a valid pokemon name!";
-        })
+        });
     }
 
-    capitalize(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
 }
 

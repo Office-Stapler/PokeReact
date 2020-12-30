@@ -62,12 +62,6 @@
     display: inline-flex;
 }
 
-.pokedexDiv {
-    background-color: black;
-    color: white;
-    border-radius: 10%;
-}
-
 .entryDiv {
     text-align: left;
 }

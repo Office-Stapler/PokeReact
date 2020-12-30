@@ -1,54 +1,19 @@
 import React from 'react';
-
+import Move from './MovesTable/Move.js';
+import {capitalize} from '../utils/stringUtils'
 import './information.css';
+import {MovesTable} from "./MovesTable/MovesTable";
 
-
-
+import {statColour, statBackColour, typeColours, gameVersionColours} from "../utils/colours";
 
 export default class Information extends React.Component {
     constructor(props) {
         super(props);
         this.pokeAPI = 'https://pokeapi.co/api/v2/';
-        this.colours = {
-            "hp": "lightgreen",
-            'attack': "#ff9c9c",
-            "defense": "#add8e6",
-            "special-attack": "#ffd19c",
-            "special-defense": "#9c9eff",
-            "speed": "#f279c4"
-        }
 
-        this.backgroundColors = {
-            "hp": "green",
-            'attack': "#ff3636",
-            "defense": "#14acde",
-            "special-attack": "#ff9f30",
-            "special-defense": "#4246ff",
-            "speed": "#ed28a2"
-        }
 
-        this.typeColours = {
-            'normal': "#A8A878",
-            'poison': '#A040A0',
-            'ground': '#E0C068',
-            'rock': '#B8A038',
-            'bug': '#A8B820',
-            'ghost': '#705898',
-            'steel': '#B8B8D0',
-            'dragon': '#7038F8',
-            'dark': '#705848',
-            'flying': '#A890F0',
-            'fire': '#F08030',
-            'psychic': '#F85888',
-            'ice': '#98D8D8',
-            'fighting': '#C03028',
-            'water': '#6890F0',
-            'grass': '#78C850',
-            'electric': '#F8D030',
-            'fairy': '#EE99AC'
-        }
     }
-    
+
     render() {
         this.info = this.props.pokeInfo;
         if (this.info !== null) {
@@ -57,10 +22,10 @@ export default class Information extends React.Component {
                     <div className="NameImageType">
                         <p className="displayP">{this.getPokeName()} (id {this.info.id})</p>
                         <div className="image">
-                            <img alt="Error loading pokemon" src={this.info.sprites.other['official-artwork']['front_default']}></img>
+                            <img alt="Error loading pokemon" src={this.info.sprites.other['official-artwork']['front_default']}/>
                             {this.getTypes()}
                         </div>
-                        
+
                     </div>
                     <div className="statWrapper">
                         <div>
@@ -80,19 +45,19 @@ export default class Information extends React.Component {
                         <p className="displayP">Pokedex Entries</p>
                         {this.getPokedexEntries()}
                     </div>
+                    <div className="pokemonMoves">
+                        <p className="displayP">Pokemon Moves</p>
+                        {this.getPokemonmoves()}
+                    </div>
                 </div>
-                
+
             )
         }
         return '';
     }
 
     getPokeName() {
-        return this.capitalize(this.info.name);
-    }
-
-    capitalize(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return capitalize(this.info.name);
     }
 
     getTypes() {
@@ -120,15 +85,15 @@ export default class Information extends React.Component {
             let damage_relations = this.props['damage_relations'];
             if (damage_relations.hasOwnProperty(relation)) {
                 let num = damage_relations[relation];
-                let info = (                        
+                let info = (
                     <tr key={relation}>
                         <td style={{
-                            backgroundColor: this.typeColours[relation],
+                            backgroundColor: typeColours[relation],
                             color: "black",
                             textAlign: "center",
                             borderRadius: "10px",
                         }}>
-                            {this.capitalize(relation)}
+                            {capitalize(relation)}
                         </td>
                         <td>
                             x{num}
@@ -153,7 +118,7 @@ export default class Information extends React.Component {
                         <th>Strong against</th>
                     </tr>
                     {strongAgainst}
-                </tbody>    
+                </tbody>
                 <tbody className="relationData">
                     <tr>
                         <th>Weak to</th>
@@ -170,9 +135,9 @@ export default class Information extends React.Component {
                     <tr>
                         <th>Immune to</th>
                     </tr>
-                    {immuneAgainst.length !== 0 ? immuneAgainst : (                   
+                    {immuneAgainst.length !== 0 ? immuneAgainst : (
                         <tr key="None">
-                            <td  style={{
+                            <td style={{
                                 backgroundColor: 'black',
                                 borderRadius: 3,
                                 textAlign: "center",
@@ -180,7 +145,7 @@ export default class Information extends React.Component {
                             }}>
                                 None
                             </td>
-                        </tr>  
+                        </tr>
                     )}
                 </tbody>
             </table>
@@ -192,32 +157,32 @@ export default class Information extends React.Component {
         let rows = []
         for (let stat of this.stats) {
             rows.push(
-            <tr key={stat.stat.name} style={{ 
-                backgroundColor: this.colours[stat.stat.name],
-                height: "10px",
-                textAlign: "left"
-            }}>
-                <td style={{
-                    float: "left",
-                    width: 255
+                <tr key={stat.stat.name} style={{
+                    backgroundColor: statColour[stat.stat.name],
+                    height: "10px",
+                    textAlign: "left"
                 }}>
-                    {this.capitalize(stat.stat.name)}
-                </td>
-                <td style={{
-                        float: "right"
-                }}>
-                    {stat['base_stat']}
-                </td>
-                <td className="statLabel">
-                    <div style= {{
-                        width: stat['base_stat'] / 255 * 100,
-                        backgroundColor: this.backgroundColors[stat.stat.name],
-                        border: "1px solid black",
-                        height: "20px",
+                    <td style={{
+                        float: "left",
+                        width: 255
                     }}>
-                    </div>
-                </td>
-            </tr>);
+                        {capitalize(stat.stat.name)}
+                    </td>
+                    <td style={{
+                        float: "right"
+                    }}>
+                        {stat['base_stat']}
+                    </td>
+                    <td className="statLabel">
+                        <div style={{
+                            width: stat['base_stat'] / 255 * 100,
+                            backgroundColor: statBackColour[stat.stat.name],
+                            border: "1px solid black",
+                            height: "20px",
+                        }}>
+                        </div>
+                    </td>
+                </tr>);
         }
         return rows;
     }
@@ -231,11 +196,15 @@ export default class Information extends React.Component {
                 entries.push(
                     <tr key={version}>
                         <th>
-                            <div className="pokedexDiv">
-                                {this.capitalize(version)}
+                            <div style={{
+                                backgroundColor: version in gameVersionColours ? gameVersionColours[version].back : "black",
+                                color: version in gameVersionColours ? gameVersionColours[version].fore : "white",
+                                borderRadius: "10%"
+                            }}>
+                                {capitalize(version)}
                             </div>
                         </th>
-                        <td style = {{
+                        <td style={{
                             textAlign: "center"
                         }}>
                             <div className="entryDiv">
@@ -255,5 +224,18 @@ export default class Information extends React.Component {
                 </tbody>
             </table>
         )
+    }
+
+    getPokemonmoves() {
+        let moves = this.props.pokeInfo.moves;
+        let displayedMoves = moves.map((elem) => {
+            return (
+                <Move
+                    url={elem.move.url}
+                    name={elem.move.name}
+                />
+            )
+        })
+        return <MovesTable moves={displayedMoves} />;
     }
 }
