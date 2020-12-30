@@ -1,4 +1,10 @@
 
 export const capitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    let splits = string.split("-");
+    let result = "";
+    splits.map((split) => {
+        result += split.charAt(0).toUpperCase() + split.slice(1);
+        result += " ";
+    })
+    return result;
 }
