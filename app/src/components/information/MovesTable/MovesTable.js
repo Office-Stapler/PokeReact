@@ -4,8 +4,9 @@ export const MovesTable = ({moves}) => {
         <table className="table2">
             <thead>
             <tr>
-                <th>Move</th>
+                <th>Name</th>
                 <th>Power</th>
+                <th>Accuracy</th>
                 <th>Type</th>
             </tr>
             </thead>

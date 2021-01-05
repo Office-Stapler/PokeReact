@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {version} from 'react';
 import Move from './MovesTable/Move.js';
 import {capitalize} from '../utils/stringUtils'
 import './information.css';
@@ -10,8 +10,6 @@ export default class Information extends React.Component {
     constructor(props) {
         super(props);
         this.pokeAPI = 'https://pokeapi.co/api/v2/';
-
-
     }
 
     render() {
@@ -46,7 +44,7 @@ export default class Information extends React.Component {
                         {this.getPokedexEntries()}
                     </div>
                     <div className="pokemonMoves">
-                        <p className="displayP">Pokemon Moves</p>
+                        <p className="displayP">Moves</p>
                         {this.getPokemonmoves()}
                     </div>
                 </div>
@@ -230,11 +228,27 @@ export default class Information extends React.Component {
 
     getPokemonmoves() {
         let moves = this.props.pokeInfo.moves;
+        let versionMoves = {};
+        let levelUpMoves = [];
+        let machineMoves = [];
+        let eggMoves = [];
         let displayedMoves = moves.map((elem) => {
+            for (let versionDetails of elem["version_group_details"]) {
+                let version = versionDetails["version_group"]["name"];
+                if (versionMoves[version] === undefined) {
+                    versionMoves[version] = [];
+                }
+                versionMoves[version].push({
+                    "level": versionDetails["level_learned_at"],
+                    "method": versionDetails["move_learn_method"]["name"],
+                    "name": elem.move.name
+                });
+            }
             return (
                 <Move
                     url={elem.move.url}
                     name={elem.move.name}
+                    key={elem.move.name}
                 />
             )
         })

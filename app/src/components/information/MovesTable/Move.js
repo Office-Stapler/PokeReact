@@ -13,16 +13,22 @@ const Move = ({ url, name }) => {
             .then((result) => {
                 setData(result);
             });
-    }, []);
+    }, [url]);
     if (!data)
-        return (<p>Is Loading....</p>)
+        return (
+            <tr>
+                <td>
+                    Is Loading....
+                </td>
+            </tr>)
     let image = process.env.PUBLIC_URL + `/types_images/${data.type.name}.png`
     return (
         <tr>
             <td>{capitalize(name)}</td>
-            <td>{data.power || "Not Applicable"}</td>
+            <td>{data.power || "--"}</td>
+            <td>{(data.accuracy || "--") + "%"}</td>
             <td>
-                <img src={image} alt={"Type not found"}></img>
+                <img style={{width:"70%", height:"auto"}} src={image} alt={"Type not found"}></img>
             </td>
         </tr>
     );

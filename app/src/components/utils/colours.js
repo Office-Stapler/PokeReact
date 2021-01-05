@@ -134,6 +134,22 @@ export const gameVersionColours = {
         "back": "#26649C",
         "fore": "white"
     },
+    "sun": {
+        "back": "#F1912B",
+        "fore": "black"
+    },
+    "moon": {
+        "back": "#5599CA",
+        "fore": "black"
+    },
+    "ultra-sun": {
+        "back": "#E95B2B",
+        "fore": "black"
+    },
+    "ultra-moon": {
+        "back": "#226DB5",
+        "fore": "black"
+    },
     "lets-go-pikachu": {
         "back": "#F5DA26",
         "fore": "black"

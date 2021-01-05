@@ -5,6 +5,7 @@ export const capitalize = (string) => {
     splits.map((split) => {
         result += split.charAt(0).toUpperCase() + split.slice(1);
         result += " ";
+        return "";
     })
     return result;
 }
